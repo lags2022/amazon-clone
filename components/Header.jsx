@@ -3,6 +3,7 @@ import Image from "next/image";
 import {
   MagnifyingGlassIcon,
   ShoppingCartIcon,
+  Bars3Icon,
 } from "@heroicons/react/24/solid";
 
 function Header() {
@@ -33,21 +34,44 @@ function Header() {
         <div className=" text-white flex items-center text-xs space-x-6 mx-6 whitespace-nowrap">
           <div className=" newcomponenttwd">
             <p>Hello Luis</p>
-            <p>Account & Lists</p>
+            <p className=" font-extrabold md:text-sm">Account & Lists</p>
           </div>
           <div className=" newcomponenttwd">
             <p>Returns</p>
-            <p>& Orders</p>
+            <p className=" font-extrabold md:text-sm">& Orders</p>
           </div>
-          <div className=" newcomponenttwd">
+          <div className="relative newcomponenttwd flex items-center">
+            <span className="absolute top-0 right-0 md:right-10 h-4 w-4 bg-yellow-400 text-center rounded-full text-black font-bold">
+              0
+            </span>
             <ShoppingCartIcon className="h-10" />
-            <p>Basket</p>
+            <p className="hidden md:inline font-extrabold md:text-sm mt-2 ">
+              Basket
+            </p>
           </div>
         </div>
       </div>
 
       {/* bottom nav */}
-      <div></div>
+      <div className="flex items-center space-x-3 p-2 pl-6 bg-amazon_blue-light text-white text-sm">
+        <p className=" newcomponenttwd flex items-center">
+          <Bars3Icon className="h-6 mr-1" />
+          All
+        </p>
+        <p className="newcomponenttwd ">Prime Video</p>
+        <p className="newcomponenttwd ">Amazon Business</p>
+        <p className="newcomponenttwd ">Today's Deals</p>
+        <p className="newcomponenttwd hidden lg:inline-flex">Electronics</p>
+        <p className="newcomponenttwd hidden lg:inline-flex">Food & Grocery</p>
+        <p className="newcomponenttwd hidden lg:inline-flex">Prime</p>
+        <p className="newcomponenttwd hidden lg:inline-flex">Buy Again</p>
+        <p className="newcomponenttwd hidden lg:inline-flex">
+          Shopper Toolkit
+        </p>
+        <p className="newcomponenttwd hidden lg:inline-flex">
+          Health & Personal Care
+        </p>
+      </div>
     </header>
   );
 }
