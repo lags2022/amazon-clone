@@ -13,6 +13,7 @@ function Header() {
       <div className=" flex items-start bg-amazon_blue p-1 flex-grow py-2 ">
         <div className=" mt-2 flex items-center flex-grow sm:flex-grow-0 ">
           <Image
+            style={{ objectFit: "contain" }}
             src="https://links.papareact.com/f90"
             width={150}
             height={40}
@@ -65,9 +66,7 @@ function Header() {
         <p className="newcomponenttwd hidden lg:inline-flex">Food & Grocery</p>
         <p className="newcomponenttwd hidden lg:inline-flex">Prime</p>
         <p className="newcomponenttwd hidden lg:inline-flex">Buy Again</p>
-        <p className="newcomponenttwd hidden lg:inline-flex">
-          Shopper Toolkit
-        </p>
+        <p className="newcomponenttwd hidden lg:inline-flex">Shopper Toolkit</p>
         <p className="newcomponenttwd hidden lg:inline-flex">
           Health & Personal Care
         </p>
