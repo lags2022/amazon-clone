@@ -1,10 +1,8 @@
-import React from "react";
-import Product from "@/components/Product";
+import Product from "./Product";
 
 function ProductFeed({ products }) {
   return (
-    <div>
-      <h1>Product here...</h1>
+    <div className="grid grid-flow-row-dense md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:-mt-52">
       {products.map((product) => (
         <Product
           key={product.id}
