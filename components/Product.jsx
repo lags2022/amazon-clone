@@ -18,12 +18,14 @@ function Product({ id, price, description, image, title, category, ...props }) {
         {category}
       </p>
 
-      <Image
-        src={image}
-        height={200}
-        width={200}
-        className="object-contain h-52 w-52"
-      />
+      <div className="m-auto">
+        <Image
+          src={image}
+          height={200}
+          width={200}
+          className="object-contain h-52 w-52"
+        />
+      </div>
 
       <h4 className="my-3 line-clamp-2">{title}</h4>
 
