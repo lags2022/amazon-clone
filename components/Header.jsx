@@ -18,6 +18,7 @@ function Header() {
             width={150}
             height={40}
             className="object-contain h-10 w-36 cursor-pointer"
+            alt=""
           />
         </div>
 
@@ -60,7 +61,9 @@ function Header() {
         </div>
         <p className="newcomponenttwd ">Prime Video</p>
         <p className="newcomponenttwd ">Amazon Business</p>
-        <p className="newcomponenttwd ">Today's Deals</p>
+
+        {/* &apos; --> esto es para que escape y se pueda usar el caracter ' */}
+        <p className="newcomponenttwd ">Today&apos;s Deals</p>
         <p className="newcomponenttwd hidden lg:inline-flex">Electronics</p>
         <p className="newcomponenttwd hidden lg:inline-flex">Food & Grocery</p>
         <p className="newcomponenttwd hidden lg:inline-flex">Prime</p>

@@ -1,4 +1,5 @@
 import Product from "./Product";
+import Image from "next/image";
 
 function ProductFeed({ products }) {
   return (
@@ -15,8 +16,10 @@ function ProductFeed({ products }) {
         />
       ))}
 
-      <img
+      <Image
         className=" md:col-span-full"
+        width={1500}
+        height={300}
         src="https://links.papareact.com/dyz"
         alt=""
       />

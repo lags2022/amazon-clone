@@ -24,6 +24,7 @@ function Product({ id, price, description, image, title, category, ...props }) {
           height={200}
           width={200}
           className="object-contain h-52 w-52"
+          alt=""
         />
       </div>
 
@@ -33,13 +34,21 @@ function Product({ id, price, description, image, title, category, ...props }) {
         {Array(rating)
           .fill()
           .map(() => (
-            <FontAwesomeIcon className="h-5 text-yellow-500" icon={faStar} />
+            <FontAwesomeIcon
+              className="h-5 text-yellow-500"
+              icon={faStar}
+              key={id}
+            />
           ))
           .concat(
             Array(5 - rating)
               .fill()
               .map(() => (
-                <FontAwesomeIcon className="h-5 text-gray-300" icon={faStar} />
+                <FontAwesomeIcon
+                  className="h-5 text-gray-300"
+                  icon={faStar}
+                  key={id}
+                />
               ))
           )}
       </div>
@@ -65,6 +74,7 @@ function Product({ id, price, description, image, title, category, ...props }) {
             height={100}
             className="w-12"
             src="https://links.papareact.com/fdw"
+            alt=""
           />
           <p className="text-xs text-gray-500">FREE Next-day Delivery</p>
         </div>
