@@ -23,6 +23,7 @@ function Checkout() {
             src="https://links.papareact.com/ikj"
             width={800}
             height={203}
+            alt=""
           />
 
           <div className="flex flex-col p-5 space-y-10 bg-white">
