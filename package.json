@@ -21,6 +21,7 @@
     "firebase": "^9.19.1",
     "firebase-admin": "^11.6.0",
     "next": "13.3.0",
+    "next-auth": "^4.22.0",
     "postcss": "8.4.21",
     "react": "18.2.0",
     "react-currency-input-field": "^3.6.10",
