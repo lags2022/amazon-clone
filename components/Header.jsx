@@ -51,7 +51,10 @@ function Header() {
             </p>
             <p className=" font-extrabold md:text-sm">Account & Lists</p>
           </div>
-          <div className=" newcomponenttwd">
+          <div
+            onClick={() => router.push("/orders")}
+            className=" newcomponenttwd"
+          >
             <p>Returns</p>
             <p className=" font-extrabold md:text-sm">& Orders</p>
           </div>
