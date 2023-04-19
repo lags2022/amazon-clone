@@ -1,5 +1,6 @@
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-export default async (req, res) => {
+
+export default async function checkout(req, res) {
   try {
     const { items, email } = req.body;
 
@@ -40,4 +41,4 @@ export default async (req, res) => {
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
-};
+}

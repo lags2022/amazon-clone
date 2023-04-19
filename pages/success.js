@@ -21,9 +21,9 @@ function Success() {
             </h1>
           </div>
           <p>
-            Thank you for shopping with us. We'll send a confirmation o item has
-            shipped, if you would like to check the status of order(s) please
-            press the link below
+            Thank you for shopping with us. We&apos;ll send a confirmation o
+            item has shipped, if you would like to check the status of order(s)
+            please press the link below
           </p>
           <button
             onClick={() => router.push("/orders")}
