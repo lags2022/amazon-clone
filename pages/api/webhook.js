@@ -24,8 +24,8 @@ const fulfillOrder = async (session) => {
     .collection("orders")
     .doc(session.id)
     .set({
-      amount: session.amount_total / 100,
-      amount_shipping: session.total_details.amount_shipping / 100,
+      amount: (session.amount_total || session.amount) / 100,
+      amount_shipping: (session.total_details.amount_shipping || 500) / 100,
       images: JSON.parse(session.metadata.images),
       timestamp: admin.firestore.FieldValue.serverTimestamp(),
     })
@@ -48,8 +48,17 @@ export default async function webhook(req, res) {
       return res.status(400).send(`Webhook error: ${error.message}`);
     }
 
-    //handle the checkout.session.completed event
+    if (event.type === "payment_intent.succeeded") {
+      const session = event.data.object;
+      return fulfillOrder(session)
+        .then(() => res.status(200).end())
+        .catch((error) =>
+          res.status(400).send(`Webhook error: ${error.message}`)
+        );
+    }
+
     if (event.type === "checkout.session.completed") {
+      //handle the checkout.session.completed event
       const session = event.data.object;
 
       //Fulfill the order...
