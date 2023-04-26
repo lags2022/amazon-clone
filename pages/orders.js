@@ -46,7 +46,6 @@ export default Orders;
 
 export async function getServerSideProps(context) {
   const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-
   //Get the users logged in credentials...
   const session = await getSession(context);
 
@@ -82,11 +81,13 @@ export async function getServerSideProps(context) {
       amountShipping: order.data().amount_shipping,
       images: order.data().images,
       timestamp: moment(order.data().timestamp.toDate()).unix(),
-      items: (
-        await stripe.checkout.sessions.listLineItems(order.id, {
-          limit: 100,
-        })
-      ).data,
+      items: (await stripe.paymentIntents.retrieve(order.id))
+        ? order.data().images.length
+        : (
+            await stripe.checkout.sessions.listLineItems(order.id, {
+              limit: 100,
+            })
+          ).data,
     }))
   );
 
