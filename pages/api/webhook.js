@@ -48,16 +48,10 @@ export default async function webhook(req, res) {
       return res.status(400).send(`Webhook error: ${error.message}`);
     }
 
-    if (event.type === "payment_intent.succeeded") {
-      const session = event.data.object;
-      return fulfillOrder(session)
-        .then(() => res.status(200).end())
-        .catch((error) =>
-          res.status(400).send(`Webhook error: ${error.message}`)
-        );
-    }
-
-    if (event.type === "checkout.session.completed") {
+    if (
+      event.type === "payment_intent.succeeded" ||
+      event.type === "checkout.session.completed"
+    ) {
       //handle the checkout.session.completed event
       const session = event.data.object;
 

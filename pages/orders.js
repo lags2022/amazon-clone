@@ -82,6 +82,8 @@ export async function getServerSideProps(context) {
       images: order.data().images,
       timestamp: moment(order.data().timestamp.toDate()).unix(),
       items: order.data().images,
+
+      // esto es para usarlo solo con web pero como use react native no salia bien(stripe.paymentIntents.retrieve(order.id) estaba usando esto pero sera de investigar mas comomejoralo). para mas adelante refactorizarlo
       //  (
       //       await stripe.checkout.sessions.listLineItems(order.id, {
       //         limit: 100,
