@@ -10,6 +10,7 @@ import { signIn } from "next-auth/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAt, faEyeSlash, faEye } from "@fortawesome/free-solid-svg-icons";
 import styles from "../styles/Form.module.css";
+import { validLogin } from "../services/validations";
 
 function Login() {
   const providers = [
@@ -19,12 +20,15 @@ function Login() {
   ];
 
   const auth = getAuth(firebaseApp);
-
   const router = useRouter();
 
   const [user, setUser] = useState(null);
   const [show, setShow] = useState(false);
   const [form, setform] = useState({
+    email: "",
+    password: "",
+  });
+  const [errors, setErrors] = useState({
     email: "",
     password: "",
   });
@@ -39,9 +43,12 @@ function Login() {
     evt.preventDefault();
     // alert("se logueo");
     let email = form.email.trim();
-    signInWithEmailAndPassword(auth, email, form.password)
-      .then((userCredential) => setUser(userCredential.user.displayName))
-      .catch((error) => console.log(error));
+
+    if (Object.values(errors).every((err) => err === "")) {
+      signInWithEmailAndPassword(auth, email, form.password)
+        .then((userCredential) => setUser(userCredential.user.displayName))
+        .catch((error) => console.log(error));
+    }
   };
 
   const handleChange = (evt) => {
@@ -49,6 +56,12 @@ function Login() {
       ...form,
       [evt.target.name]: evt.target.value,
     });
+    setErrors(
+      validLogin({
+        ...form,
+        [evt.target.name]: evt.target.value,
+      })
+    );
   };
 
   return (
@@ -63,31 +76,40 @@ function Login() {
             onSubmit={handleSubmit}
             className="form_general "
           >
-            <div className={styles.inputg}>
-              <input
-                className={styles.inputext}
-                type="email"
-                name="email"
-                placeholder="Email"
-                value={form.email}
-                onChange={handleChange}
-              />
-              <span className={styles.spantext}>
-                <FontAwesomeIcon icon={faAt} />
-              </span>
+            <div>
+              <div className={styles.inputg}>
+                <input
+                  className={styles.inputext}
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  value={form.email}
+                  onChange={handleChange}
+                />
+                <span className={styles.spantext}>
+                  <FontAwesomeIcon icon={faAt} />
+                </span>
+              </div>
+              <small className={styles.smalltext}>{errors.email}</small>
             </div>
-            <div className={styles.inputg}>
-              <input
-                className={styles.inputext}
-                type={`${show ? "text" : "password"}`}
-                name="password"
-                placeholder="Password"
-                value={form.password}
-                onChange={handleChange}
-              />
-              <span className={styles.spantext} onClick={() => setShow(!show)}>
-                <FontAwesomeIcon icon={show ? faEyeSlash : faEye} />
-              </span>
+            <div>
+              <div className={styles.inputg}>
+                <input
+                  className={styles.inputext}
+                  type={`${show ? "text" : "password"}`}
+                  name="password"
+                  placeholder="Password"
+                  value={form.password}
+                  onChange={handleChange}
+                />
+                <span
+                  className={styles.spantext}
+                  onClick={() => setShow(!show)}
+                >
+                  <FontAwesomeIcon icon={show ? faEyeSlash : faEye} />
+                </span>
+              </div>
+              <small className={styles.smalltext}>{errors.password}</small>
             </div>
             <button type="submit" onClick={handleSubmit} className="button">
               Login

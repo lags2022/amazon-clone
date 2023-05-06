@@ -22,3 +22,7 @@
   color: #6366f1;
   cursor: pointer;
 }
+
+.smalltext {
+  @apply absolute block mx-2 text-red-500;
+}
