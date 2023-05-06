@@ -121,7 +121,10 @@ function Login() {
               <button
                 key={i}
                 onClick={() =>
-                  signIn(prov.name, { callbackUrl: "http://localhost:3000" })
+                  // signIn(prov.name, { callbackUrl: "http://localhost:3000" })
+                  signIn(prov.name, {
+                    callbackUrl: "https://amazon-clone-lags2022.vercel.app/",
+                  })
                 }
               >
                 <Image width={30} height={30} src={prov.svg} alt={prov.name} />
