@@ -1,0 +1,24 @@
+.inputg {
+  @apply flex border rounded-xl;
+}
+
+.inputext {
+  @apply w-full rounded-xl py-3 px-5 bg-slate-50 focus:outline-none border-none;
+}
+
+.spantext {
+  @apply flex items-center px-2;
+}
+
+.inputext + * {
+  color: #cbd5e1;
+}
+
+.inputext:focus + * {
+  color: #6366f1;
+}
+
+.inputext:not([type="email"]) ~ span:hover * {
+  color: #6366f1;
+  cursor: pointer;
+}

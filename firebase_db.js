@@ -13,7 +13,7 @@ const firebaseConfig = {
 
 // const app = !firebase.apps.length?firebaseConfig.initializeApp(firebaseConfig):firebase.app() --> v.8 firebase
 
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);//esto lo importaremos tbm para la autenticacion con correo y password
 
 // const db=app.firestore()
 const db = getFirestore(app);

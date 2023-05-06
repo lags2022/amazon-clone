@@ -1,4 +1,3 @@
-import React from "react";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -10,12 +9,15 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import { useSelector } from "react-redux";
 import { selectItems } from "@/redux/slices/basketSlice";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { getAuth } from "firebase/auth";
+import { app as firebaseApp } from "../firebase_db";
 
 function Header() {
   const { data: session } = useSession();
   const items = useSelector(selectItems);
-  const router = useRouter();
+
+  const auth = getAuth(firebaseApp);
+  const user = auth.currentUser;
 
   return (
     <header>
@@ -50,7 +52,9 @@ function Header() {
             className=" newcomponenttwd"
           >
             <p className="text-start">
-              {session ? `Hello, ${session.user.name}` : "Sign In"}
+              {session || user
+                ? `Hello, ${session?.user.name || user?.displayName}`
+                : "Sign In"}
             </p>
             <p className=" font-extrabold md:text-sm">Account & Lists</p>
           </button>
