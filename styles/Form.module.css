@@ -1,9 +1,9 @@
 .inputg {
-  @apply flex border rounded-xl;
+  @apply flex border rounded-xl focus-within:ring-2 focus-within:ring-blue-400 sm:w-[300px] w-[250px];
 }
 
 .inputext {
-  @apply w-full rounded-xl py-3 px-5 bg-slate-50 focus:outline-none border-none;
+  @apply w-full rounded-xl py-3 px-5 bg-slate-50 outline-none border-none;
 }
 
 .spantext {

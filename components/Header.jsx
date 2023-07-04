@@ -9,15 +9,33 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import { useSelector } from "react-redux";
 import { selectItems } from "@/redux/slices/basketSlice";
 import Link from "next/link";
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { app as firebaseApp } from "../firebase_db";
+import { useEffect, useState } from "react";
 
 function Header() {
   const { data: session } = useSession();
+  const [user, setUser] = useState(null);
   const items = useSelector(selectItems);
-
   const auth = getAuth(firebaseApp);
-  const user = auth.currentUser;
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log("usuario entrante");
+        setUser(user.displayName);
+      } else console.log("fuck");
+    });
+  }, []);
+
+  const handleSessionAndLogin = () => {
+    if (user) {
+      auth.signOut();
+      setUser(null);
+    } else {
+      !session ? signIn() : signOut();
+    }
+  };
 
   return (
     <header>
@@ -47,13 +65,10 @@ function Header() {
 
         {/* right */}
         <div className=" text-white flex items-center text-xs space-x-6 mx-6 whitespace-nowrap">
-          <button
-            onClick={!session ? signIn : signOut}
-            className=" newcomponenttwd"
-          >
+          <button onClick={handleSessionAndLogin} className=" newcomponenttwd">
             <p className="text-start">
               {session || user
-                ? `Hello, ${session?.user.name || user?.displayName}`
+                ? `Hello, ${session?.user.name || user}`
                 : "Sign In"}
             </p>
             <p className=" font-extrabold md:text-sm">Account & Lists</p>

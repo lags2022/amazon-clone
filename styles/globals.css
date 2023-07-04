@@ -12,11 +12,11 @@
   }
 
   .divform_general {
-    @apply w-3/4 m-auto flex flex-col gap-4;
+    @apply m-auto flex flex-col gap-4 sm:px-10 px-6;
   }
 
   .h1form_general {
-    @apply text-gray-800 text-xl sm:text-3xl font-bold py-4 mb-2;
+    @apply text-gray-800 text-xl sm:text-3xl font-bold py-4 pt-0 mt-0 mb-2;
   }
 
   .form_general {

@@ -34,8 +34,8 @@ export const validRegister = ({ username, email, password, cpassword }) => {
   if (!password) errors.password = "Required";
   else if (!validPassword.test(password))
     errors.password = "Password must have at least one number";
-  else if (password.length < 5 || password.length > 40)
-    errors.password = "Password must be between 5 and 40 characters long";
+  else if (password.length < 6 || password.length > 40)
+    errors.password = "Password must be between 6 and 40 characters long";
   else if (password.includes(" ")) errors.password = "Password have spaces";
 
   //cpassword

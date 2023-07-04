@@ -11,11 +11,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAt, faEyeSlash, faEye } from "@fortawesome/free-solid-svg-icons";
 import styles from "../styles/Form.module.css";
 import { validLogin } from "../services/validations";
+import ErrorForm from "./ErrorForm";
+import { toast, Toaster } from "react-hot-toast";
+import clsx from "clsx";
 
 function Login() {
   const providers = [
     { name: "google", svg: "./assets/google.svg" },
-    { name: "facebook", svg: "./assets/facebook.svg" },
+    // { name: "facebook", svg: "./assets/facebook.svg" },
     { name: "github", svg: "./assets/github.svg" },
   ];
 
@@ -24,6 +27,8 @@ function Login() {
 
   const [user, setUser] = useState(null);
   const [show, setShow] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [showError, setShowError] = useState(false);
   const [form, setform] = useState({
     email: "",
     password: "",
@@ -41,14 +46,21 @@ function Login() {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    // alert("se logueo");
-    let email = form.email.trim();
-
-    if (Object.values(errors).every((err) => err === "")) {
-      signInWithEmailAndPassword(auth, email, form.password)
-        .then((userCredential) => setUser(userCredential.user.displayName))
-        .catch((error) => console.log(error));
-    }
+    const emailChanged = form.email.trim();
+    setLoading(true);
+    setShowError(true);
+    signInWithEmailAndPassword(auth, emailChanged, form.password)
+      .then((userCredential) => setUser(userCredential.user.displayName))
+      .then(() => {
+        toast.success("User authenticated");
+      })
+      .catch(() => {
+        toast.error("User not found");
+        setTimeout(() => {
+          setShowError(false);
+        }, 4000);
+      })
+      .finally(() => setLoading(false));
   };
 
   const handleChange = (evt) => {
@@ -85,12 +97,18 @@ function Login() {
                   placeholder="Email"
                   value={form.email}
                   onChange={handleChange}
+                  disabled={loading}
                 />
                 <span className={styles.spantext}>
                   <FontAwesomeIcon icon={faAt} />
                 </span>
               </div>
-              <small className={styles.smalltext}>{errors.email}</small>
+              <div className="relative flex items-center justify-center">
+                {errors.email && showError && (
+                  <ErrorForm formError={errors.email} />
+                )}
+              </div>
+              {/* <small className={styles.smalltext}>{errors.email}</small> */}
             </div>
             <div>
               <div className={styles.inputg}>
@@ -101,6 +119,7 @@ function Login() {
                   placeholder="Password"
                   value={form.password}
                   onChange={handleChange}
+                  disabled={loading}
                 />
                 <span
                   className={styles.spantext}
@@ -109,9 +128,23 @@ function Login() {
                   <FontAwesomeIcon icon={show ? faEyeSlash : faEye} />
                 </span>
               </div>
-              <small className={styles.smalltext}>{errors.password}</small>
+              <div className="relative flex items-center justify-center">
+                {errors.password && showError && (
+                  <ErrorForm formError={errors.password} />
+                )}
+              </div>
+              {/* <small className={styles.smalltext}>{errors.password}</small> */}
             </div>
-            <button type="submit" onClick={handleSubmit} className="button">
+            <button
+              type="submit"
+              onClick={handleSubmit}
+              disabled={loading}
+              className={clsx(
+                `button`,
+                loading &&
+                  "from-gray-300 to-gray-500 border-gray-200 text-gray-300 cursor-not-allowed"
+              )}
+            >
               Login
             </button>
           </form>
@@ -120,12 +153,17 @@ function Login() {
             {providers.map((prov, i) => (
               <button
                 key={i}
-                onClick={() =>
+                disabled={loading}
+                onClick={() => {
                   // signIn(prov.name, { callbackUrl: "http://localhost:3000" })
+                  setLoading(true);
                   signIn(prov.name, {
                     callbackUrl: "https://amazon-clone-lags2022.vercel.app/",
                   })
-                }
+                    .then(() => toast.success("User authenticated"))
+                    .catch(() => toast.error("User not found"))
+                    .finally(() => setLoading(false));
+                }}
               >
                 <Image width={30} height={30} src={prov.svg} alt={prov.name} />
               </button>
@@ -136,12 +174,14 @@ function Login() {
             <Link
               className="text-blue-400 font-semibold hover:text-blue-600"
               href="/register"
+              disabled={loading}
             >
               Sign Up
             </Link>
           </div>
         </div>
       )}
+      <Toaster />
     </LoginStyles>
   );
 }

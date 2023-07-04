@@ -17,9 +17,14 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { validRegister } from "@/services/validations";
 import { useRouter } from "next/router";
+import { toast, Toaster } from "react-hot-toast";
+import clsx from "clsx";
+import ErrorForm from "./ErrorForm";
 
 function Register() {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [showError, setShowError] = useState(false);
   const auth = getAuth(firebaseApp);
   const [form, setform] = useState({
     username: "",
@@ -41,18 +46,37 @@ function Register() {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    // alert("se registro");
     let email = form.email.trim();
-
-    if (Object.values(errors).every((err) => err === "")) {
+    setShowError(true);
+    if (
+      !errors.username &&
+      !errors.email &&
+      !errors.password &&
+      !errors.cpassword
+    ) {
+      setLoading(true);
       createUserWithEmailAndPassword(auth, email, form.password)
         .then((userCredential) => {
           return updateProfile(userCredential.user, {
             displayName: form.username,
           });
         })
-        .catch((error) => console.log(error));
-      router.push("/login");
+        .then(() => {
+          toast.success("User created");
+          router.push("/login");
+        })
+        .catch((error) => {
+          toast.error("Data missing");
+          // toast.error(error.message);
+          setTimeout(() => {
+            setShowError(false);
+          }, 4000);
+        })
+        .finally(() => setLoading(false));
+    } else {
+      setTimeout(() => {
+        setShowError(false);
+      }, 4000);
     }
   };
 
@@ -81,12 +105,17 @@ function Register() {
               placeholder="Username"
               value={form.username}
               onChange={handleChange}
+              disabled={loading}
             />
             <span className={styles.spantext}>
               <FontAwesomeIcon icon={faUser} />
             </span>
           </div>
-          <small className={styles.smalltext}>{errors.username}</small>
+          <div className="relative flex items-center justify-center">
+            {errors.username && showError && (
+              <ErrorForm formError={errors.username} />
+            )}
+          </div>
         </div>
         <div>
           <div className={styles.inputg}>
@@ -97,12 +126,17 @@ function Register() {
               placeholder="Email"
               value={form.email}
               onChange={handleChange}
+              disabled={loading}
             />
             <span className={styles.spantext}>
               <FontAwesomeIcon icon={faAt} />
             </span>
           </div>
-          <small className={styles.smalltext}>{errors.email}</small>
+          <div className="relative flex items-center justify-center">
+            {errors.email && showError && (
+              <ErrorForm formError={errors.email} />
+            )}
+          </div>
         </div>
         <div>
           <div className={styles.inputg}>
@@ -113,6 +147,7 @@ function Register() {
               placeholder="Password"
               value={form.password}
               onChange={handleChange}
+              disabled={loading}
             />
             <span
               className={styles.spantext}
@@ -121,7 +156,11 @@ function Register() {
               <FontAwesomeIcon icon={show.password ? faEyeSlash : faEye} />
             </span>
           </div>
-          <small className={styles.smalltext}>{errors.password}</small>
+          <div className="relative flex items-center justify-center">
+            {errors.password && showError && (
+              <ErrorForm formError={errors.password} />
+            )}
+          </div>
         </div>
         <div>
           <div className={styles.inputg}>
@@ -131,6 +170,7 @@ function Register() {
               name="cpassword"
               placeholder="Confirm password"
               value={form.cpassword}
+              disabled={loading}
               onChange={handleChange}
             />
             <span
@@ -140,10 +180,23 @@ function Register() {
               <FontAwesomeIcon icon={show.cpassword ? faEyeSlash : faEye} />
             </span>
           </div>
-          <small className={styles.smalltext}>{errors.cpassword}</small>
+          <div className="relative flex items-center justify-center">
+            {errors.cpassword && showError && (
+              <ErrorForm formError={errors.cpassword} />
+            )}
+          </div>
         </div>
 
-        <button type="submit" onClick={handleSubmit} className="button">
+        <button
+          type="submit"
+          disabled={loading}
+          onClick={handleSubmit}
+          className={clsx(
+            `button`,
+            loading &&
+              "from-gray-300 to-gray-500 border-gray-200 text-gray-300 cursor-not-allowed"
+          )}
+        >
           Register
         </button>
       </form>
@@ -156,6 +209,7 @@ function Register() {
           Sign In
         </Link>
       </div>
+      <Toaster />
     </div>
   );
 }
