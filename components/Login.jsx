@@ -47,6 +47,9 @@ function Login() {
   const handleSubmit = (evt) => {
     evt.preventDefault();
     const emailChanged = form.email.trim();
+
+    console.log("login aplicacion", form);
+
     setLoading(true);
     setShowError(true);
     signInWithEmailAndPassword(auth, emailChanged, form.password)
@@ -142,7 +145,7 @@ function Login() {
               className={clsx(
                 `button`,
                 loading &&
-                  "from-gray-300 to-gray-500 border-gray-200 text-gray-300 cursor-not-allowed"
+                "from-gray-300 to-gray-500 border-gray-200 text-gray-300 cursor-not-allowed"
               )}
             >
               Login

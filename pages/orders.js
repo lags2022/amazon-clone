@@ -5,9 +5,14 @@ import moment from "moment";
 import db from "@/firebase_db";
 import { collection, query, orderBy, getDocs } from "firebase/firestore";
 import Order from "@/components/Order";
+import { getAuth } from "firebase/auth";
 
 function Orders({ orders }) {
   const { data: session } = useSession();
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  console.log("orders", session, user);
 
   return (
     <div>
@@ -16,7 +21,7 @@ function Orders({ orders }) {
         <h1 className="text-3xl border-b mb-2 pb-1 border-yellow-400">
           Your Orders
         </h1>
-        {session ? (
+        {session || user ? (
           <h2>{orders.length} Orders</h2>
         ) : (
           <h2>Please sign in to see your orders</h2>
@@ -48,8 +53,10 @@ export async function getServerSideProps(context) {
   const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
   //Get the users logged in credentials...
 
+  console.log(JSON.stringify(context));
+  // const auth = getAuth();
+  // const user = auth.currentUser;
   const session = await getSession(context);
-  console.log(session);
 
   if (!session) {
     return {
@@ -69,7 +76,7 @@ export async function getServerSideProps(context) {
   const ordersCollection = collection(
     db,
     "users",
-    session.user.email,
+    session?.user?.email || user?.email,
     "orders"
   );
   const ordersQuery = query(ordersCollection, orderBy("timestamp", "desc"));

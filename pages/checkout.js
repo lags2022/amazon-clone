@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react";
 import getSymbolFromCurrency from "currency-symbol-map";
 import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
+import { getAuth } from "firebase/auth";
 
 const stripePromise = loadStripe(process.env.stripe_public_key);
 
@@ -15,6 +16,8 @@ function Checkout() {
   const items = useSelector(selectItems);
   const total = useSelector(selectTotal);
   const { data: session } = useSession();
+  const auth = getAuth();
+  const user = auth.currentUser;
 
   const createCheckoutSession = async () => {
     const stripe = await stripePromise;
@@ -22,7 +25,7 @@ function Checkout() {
     //call the backend to create a checkout session
     const checkoutSession = await axios.post("api/create-checkout-session", {
       items,
-      email: session.user.email,
+      email: session?.user?.email || user?.email,
     });
 
     //redirect user/customer to Stripe Checkout
@@ -84,13 +87,16 @@ function Checkout() {
               <button
                 role="link"
                 onClick={createCheckoutSession}
-                disabled={!session}
+                disabled={!session && !user}
                 className={`button mt-2 ${
                   !session &&
+                  !user &&
                   "from-gray-300 to-gray-500 border-gray-200 text-gray-300 cursor-not-allowed"
                 }`}
               >
-                {!session ? "Sign in to Checkout" : "Proceed to Checkout"}
+                {!session && !user
+                  ? "Sign in to Checkout"
+                  : "Proceed to Checkout"}
               </button>
             </>
           )}
