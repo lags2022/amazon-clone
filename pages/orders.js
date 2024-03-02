@@ -12,8 +12,6 @@ function Orders({ orders }) {
   const auth = getAuth();
   const user = auth.currentUser;
 
-  console.log("orders", session, user);
-
   return (
     <div>
       <Header />
@@ -50,10 +48,9 @@ function Orders({ orders }) {
 export default Orders;
 
 export async function getServerSideProps(context) {
-  const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+  // const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
   //Get the users logged in credentials...
 
-  console.log(JSON.stringify(context));
   // const auth = getAuth();
   // const user = auth.currentUser;
   const session = await getSession(context);
@@ -76,7 +73,8 @@ export async function getServerSideProps(context) {
   const ordersCollection = collection(
     db,
     "users",
-    session?.user?.email || user?.email,
+    session?.user?.email,
+    // session?.user?.email || user?.email,
     "orders"
   );
   const ordersQuery = query(ordersCollection, orderBy("timestamp", "desc"));
